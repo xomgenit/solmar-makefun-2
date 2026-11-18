@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOLMAR — Streets of the Sun</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="game-canvas" width="1280" height="720"></canvas>
+
+  <div id="title-screen" class="overlay">
+    <div class="title-card">
+      <div class="logo">SOLMAR</div>
+      <div class="tagline">STREETS OF THE SUN</div>
+      <p class="pitch">An original open-world crime game in Solmar Bay. Steal cars, outrun
+        the SBPD, run jobs for Vera Santos — and take the city for yourself.</p>
+      <div class="features">5 story missions &nbsp;·&nbsp; Wanted system &amp; police chases &nbsp;·&nbsp; Traffic &amp; pedestrians &nbsp;·&nbsp; Full city to explore</div>
+      <div class="menu-buttons">
+        <button id="btn-new" class="btn primary">NEW GAME</button>
+        <button id="btn-continue" class="btn">CONTINUE</button>
+        <button id="btn-howto" class="btn">HOW TO PLAY</button>
+      </div>
+      <p class="foot">100% original — its own city, characters, vehicles and story. No network needed.</p>
+    </div>
+  </div>
+
+  <div id="howto-panel" class="overlay hidden">
+    <div class="panel-card">
+      <h2>HOW TO PLAY</h2>
+      <ul>
+        <li><b>WASD / Arrows</b> — walk, or drive when in a car</li>
+        <li><b>Shift</b> — sprint on foot &nbsp;·&nbsp; <b>Space</b> — handbrake while driving</li>
+        <li><b>E</b> — steal / enter / exit a car, pick things up, respray at the Auto Spa</li>
+        <li><b>Mouse</b> — aim &nbsp;·&nbsp; <b>Click / hold</b> — shoot</li>
+        <li><b>Esc / P</b> — pause &nbsp;·&nbsp; <b>M</b> — mute</li>
+      </ul>
+      <p>Crimes the police or bystanders witness raise your wanted level — lose
+        them, lie low until the heat cools, or pay $150 for a respray at the
+        Sunset Auto Spa. The hospital patches you up for $50. Your game saves
+        automatically after every mission.</p>
+      <button id="btn-howto-close" class="btn primary">GOT IT</button>
+    </div>
+  </div>
+
+  <div id="pause-menu" class="overlay hidden">
+    <div class="panel-card">
+      <h2>PAUSED</h2>
+      <p id="pause-stats" class="stats"></p>
+      <div class="menu-buttons">
+        <button id="btn-resume" class="btn primary">RESUME</button>
+        <button id="btn-save" class="btn">SAVE GAME</button>
+        <button id="btn-restart-mission" class="btn">RESTART MISSION</button>
+        <button id="btn-quit" class="btn">QUIT TO TITLE</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="end-screen" class="overlay hidden">
+    <div class="panel-card end">
+      <h2 id="end-title">WASTED</h2>
+      <p id="end-text"></p>
+      <button id="btn-respawn" class="btn primary">GET BACK UP</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

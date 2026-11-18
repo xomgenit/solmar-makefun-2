@@ -1,0 +1,86 @@
+/* SOLMAR — Streets of the Sun: page + menu styling. The game itself is one
+   canvas; these styles only frame it and dress the title/pause/end overlays. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: #10131a;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#stage {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #8fd06a;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 12, 24, 0.55);
+  z-index: 5;
+}
+.hidden { display: none !important; }
+.title-card, .panel-card {
+  text-align: center;
+  max-width: 640px;
+  padding: 36px 44px;
+  background: rgba(10, 14, 22, 0.82);
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 16px;
+}
+.logo {
+  font-size: 84px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  line-height: 1;
+  background: linear-gradient(180deg, #ffe66d 20%, #ff8c42 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 30px rgba(255, 140, 66, 0.35);
+}
+.tagline {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  color: #9fd8ff;
+  margin: 8px 0 18px;
+}
+.pitch { font-size: 16px; line-height: 1.5; color: #e8e8e8; }
+.features { font-size: 13px; color: #ffd700; margin: 16px 0 22px; }
+.foot { font-size: 12px; color: #999; margin-top: 18px; }
+.menu-buttons { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.btn {
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 13px 34px;
+  min-width: 260px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+}
+.btn:hover { background: rgba(255, 215, 0, 0.22); }
+.btn:disabled { opacity: 0.35; cursor: default; }
+.btn.primary { background: linear-gradient(180deg, #ffb347, #ff7b2e); border-color: #ff8c42; color: #1a1005; }
+.btn.primary:hover { filter: brightness(1.1); }
+.panel-card h2 { font-size: 34px; letter-spacing: 4px; margin-bottom: 16px; color: #ffd700; }
+.panel-card ul { text-align: left; list-style: none; line-height: 2; font-size: 15px; margin-bottom: 14px; }
+.panel-card p { font-size: 15px; line-height: 1.6; color: #ddd; margin-bottom: 18px; }
+.panel-card .stats { font-size: 14px; color: #9fd8ff; }
+.panel-card.end h2 { font-size: 64px; color: #ff4444; letter-spacing: 10px; }
