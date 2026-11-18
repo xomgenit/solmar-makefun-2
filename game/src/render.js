@@ -4,6 +4,7 @@
 import { WORLD, isSand } from './city.js';
 import { CAR_MODELS } from './entities.js';
 import { drawFx } from './fx.js';
+import { drawStashes } from './stashes.js';
 
 export const VIEW_W = 1280;
 export const VIEW_H = 720;
@@ -281,6 +282,7 @@ export function drawEntities(ctx, game) {
   for (const car of game.cars) {
     if (onScreen(cam, car.x, car.y, 60)) drawCarBody(ctx, car);
   }
+  drawStashes(ctx, game);
   for (const ped of game.peds) {
     if (onScreen(cam, ped.x, ped.y, 40)) drawPerson(ctx, ped.x, ped.y, ped.angle, ped.shirt, ped.skin, ped.state === 'down');
   }

@@ -44,6 +44,7 @@ export function serializeGame(game) {
     mission: game.missions.active ? game.missions.active.def.id : null,
     missionStep: game.missions.active ? game.missions.active.stepIndex : 0,
     completedMissions: [...game.missions.done],
+    stashes: (game.stashes || []).map((s) => !!s.found),
     unlockedSports: !!game.unlockedSports,
     stashesFound: game.stashesFound || 0,
     stats: { ...game.stats },

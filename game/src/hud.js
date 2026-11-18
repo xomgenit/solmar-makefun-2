@@ -214,6 +214,12 @@ function drawMinimap(ctx, game) {
     const lm = game.city.landmarks[key];
     ctx.fillRect(mx(lm.x) - 1.5, my(lm.y) - 1.5, 3, 3);
   }
+  // Unfound cash stashes: green dots.
+  ctx.fillStyle = '#7CFC00';
+  for (const s of game.stashes || []) {
+    if (s.found) continue;
+    ctx.beginPath(); ctx.arc(mx(s.x), my(s.y), 3, 0, Math.PI * 2); ctx.fill();
+  }
   // Cops + cruisers flash blue/red; gang members red.
   const flash = Math.floor(game.time * 4) % 2 === 0;
   ctx.fillStyle = flash ? '#2e7bff' : '#ff2e2e';

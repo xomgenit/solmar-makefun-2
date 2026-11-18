@@ -7,6 +7,7 @@ import { createAudio } from './audio.js';
 import { createInput } from './input.js';
 import { hasSave, readSave, writeSave, serializeGame } from './save.js';
 import { createMissions } from './missions.js';
+import { buildStashes, checkStashes } from './stashes.js';
 import { initFx, updateFx, showBanner, showHint } from './fx.js';
 import {
   CAR_MODELS, spawnParkedCars, spawnTraffic, spawnPeds, updateTraffic,
@@ -51,6 +52,7 @@ function createGame(seed, opts = {}) {
     player: { x: hideout.x, y: hideout.y + 130, angle: -Math.PI / 2, health: 100, onFoot: true, car: null },
     cars: [], peds: [], cops: [], enemies: [],
     missions: createMissions(),
+    stashes: buildStashes(city),
     fx: initFx(),
     camera: { x: clamp(hideout.x - VIEW_W / 2, 0, WORLD.w - VIEW_W), y: clamp(hideout.y - VIEW_H / 2, 0, WORLD.h - VIEW_H) },
     stats: { kills: 0, carsStolen: 0, pedsHit: 0, copsDown: 0, distanceDriven: 0 },
@@ -65,6 +67,14 @@ function createGame(seed, opts = {}) {
   g.onCrime = (n, kind) => addWanted(g, n, kind);
   g.saveGame = () => writeSave(serializeGame(g));
   g.endRun = (kind) => endRun(g, kind);
+  // Vera's reward for Hot Delivery: a red Vortex GT parked on the road
+  // beside the garage (road x=3600, clear of the garage building).
+  g.spawnSportsCar = () => {
+    const gr = city.landmarks.garage;
+    const car = makeCar('sports', 3600 + 22, gr.y + 140, Math.PI / 2, 'parked');
+    car.color = '#e74c3c';
+    g.cars.push(car);
+  };
   spawnParkedCars(g);
   spawnTraffic(g, 14);
   spawnPeds(g, 18);
@@ -80,6 +90,9 @@ function applySave(g, data) {
   g.player.y = data.player.y;
   g.unlockedSports = !!data.unlockedSports;
   g.stashesFound = data.stashesFound || 0;
+  if (Array.isArray(data.stashes)) {
+    data.stashes.forEach((f, i) => { if (g.stashes[i]) g.stashes[i].found = !!f; });
+  }
   Object.assign(g.stats, data.stats || {});
   g.missions.done = [...(data.completedMissions || [])];
   if (data.car) {
@@ -100,6 +113,14 @@ function applySave(g, data) {
   if (data.mission && g.missions.defs[data.mission] && !g.missions.done.includes(data.mission)) {
     g.missions.start(data.mission, g);
   }
+  // Saved between jobs (or after a fail): resume the story chain at the
+  // next unfinished mission instead of stranding the player in free roam.
+  if (!g.missions.active) {
+    const next = g.missions.nextUndone();
+    if (next) g.missions.start(next, g);
+  }
+  // The unlocked sports car respawns at the garage if none is around.
+  if (g.unlockedSports && !g.cars.some((c) => c.model === 'sports')) g.spawnSportsCar();
   g.zone = zoneAt(g.city, g.player.x, g.player.y);
   g.camera.x = clamp(g.player.x - VIEW_W / 2, 0, WORLD.w - VIEW_W);
   g.camera.y = clamp(g.player.y - VIEW_H / 2, 0, WORLD.h - VIEW_H);
@@ -140,7 +161,7 @@ function pauseGame() {
   const s = game.stats;
   $('pause-stats').textContent =
     `Cash $${game.cash.toLocaleString('en-US')}  ·  Missions done: ${game.missions.done.length}  ·  ` +
-    `Cars stolen: ${s.carsStolen}  ·  Kings down: ${s.kills}  ·  Driven: ${Math.round(s.distanceDriven / 1000)} km`;
+    `Stashes: ${game.stashesFound}/3  ·  Cars stolen: ${s.carsStolen}  ·  Kings down: ${s.kills}  ·  Driven: ${Math.round(s.distanceDriven / 1000)} km`;
   show($('pause-menu'));
   input.endFrame();
 }
@@ -284,6 +305,7 @@ function update(g, dt) {
 
   g.eConsumed = false;
   g.missions.update(g, dt);
+  checkStashes(g);
   handleInteract(g);
 
   // "Press E" hint when a stealable car is right there.
